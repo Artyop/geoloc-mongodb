@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:latest
+  standalone_shard:
+    extends:
+      service: mongo
+    command: [mongod, --shardsvr]
+    expose:
+      - 27018
+  config:
+    extends:
+      service: mongo
+    command: [mongod, --configsvr, --replSet, config]
+    expose:
+      - 27019

@@ -1,0 +1,38 @@
+version: '2'
+services:
+  sh0:
+    extends:
+      file: mongo.yml
+      service: standalone_shard
+    volumes:
+      - ./data/sh0:/data/db
+    container_name: mongo-geoloc_sh0
+  sh1:
+    extends:
+      file: mongo.yml
+      service: standalone_shard
+    volumes:
+      - ./data/sh1:/data/db
+    container_name: mongo-geoloc_sh1
+  sh2:
+    extends:
+      file: mongo.yml
+      service: standalone_shard
+    volumes:
+      - ./data/sh2:/data/db
+    container_name: mongo-geoloc_sh2
+  config:
+    extends:
+      file: mongo.yml
+      service: config
+    volumes:
+      - ./data/configdb:/data/configdb
+    container_name: mongo-geoloc_config
+  mongos:
+    extends:
+      file: mongo.yml
+      service: mongo
+    command: [mongos, --bind_ip_all, --configdb, "config/config:27019"]
+    ports:
+      - 27017:27017
+    container_name: mongo-geoloc_mongos
